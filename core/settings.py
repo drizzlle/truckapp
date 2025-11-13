@@ -28,9 +28,12 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["truckapp-xq3x.onrender.com", "https://127.0.0.1"]
+CSRF_TRUSTED_ORIGINS = ["truckapp-xq3x.onrender.com", "https://127.0.0.1"]
+CSRF_ALLOWED_ORIGINS = ["truckapp-xq3x.onrender.com", "https://127.0.0.1"]
+CORS_ORIGINS_WHITELIST = ["truckapp-xq3x.onrender.com", "https://127.0.0.1"]
 
 #Rest Framework Configuration
 REST_FRAMEWORK = {
