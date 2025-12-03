@@ -23,3 +23,8 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('', include('apps.pages.urls')),
 ]
+
+# Error handlers
+handler403 = 'apps.pages.views.handler403'
+handler404 = 'apps.pages.views.handler404'
+handler500 = 'apps.pages.views.handler500'
