@@ -1,0 +1,2296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruckApp API Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #f8f9fa;
+        }
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            padding: 30px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        header p {
+            font-size: 1em;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        .main-container {
+            display: flex;
+            margin-top: 120px;
+            min-height: calc(100vh - 120px);
+        }
+        .sidebar {
+            width: 280px;
+            background: white;
+            position: fixed;
+            left: 0;
+            top: 120px;
+            bottom: 0;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            border-right: 1px solid #e5e7eb;
+        }
+        .sidebar h3 {
+            color: #1e3a8a;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+            font-weight: 600;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            margin: 0;
+        }
+        .sidebar ul li a {
+            display: block;
+            color: #4b5563;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 0.95em;
+        }
+        .sidebar ul li a:hover {
+            background: #eff6ff;
+            color: #1e3a8a;
+            padding-left: 20px;
+        }
+        .sidebar ul li a.active {
+            background: #1e3a8a;
+            color: white;
+        }
+        .content {
+            margin-left: 300px;
+            flex: 1;
+            padding: 20px 40px 40px 40px;
+            max-width: calc(100% - 300px);
+        }
+        .section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            scroll-margin-top: 130px;
+            border: 1px solid #e5e7eb;
+        }
+        .section h2 {
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+        .section h3 {
+            color: #374151;
+            margin: 25px 0 15px 0;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        .section h4 {
+            color: #4b5563;
+            margin: 15px 0 10px 0;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        .endpoint {
+            background: #f9fafb;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 6px;
+            border-left: 4px solid #1e3a8a;
+            border: 1px solid #e5e7eb;
+            border-left: 4px solid #1e3a8a;
+        }
+        .method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85em;
+            margin-right: 10px;
+        }
+        .method.get { background: #059669; color: white; }
+        .method.post { background: #2563eb; color: white; }
+        .method.patch { background: #d97706; color: white; }
+        .method.delete { background: #dc2626; color: white; }
+        .url {
+            font-family: 'Courier New', monospace;
+            font-size: 1.05em;
+            color: #1f2937;
+            word-break: break-all;
+        }
+        .description {
+            margin: 10px 0;
+            color: #6b7280;
+        }
+        .auth-required {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        .response-example {
+            background: #f0f9ff;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 3px solid #2563eb;
+        }
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            overflow-x: auto;
+            display: block;
+        }
+        .param-table th {
+            background: #f9fafb;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #e5e7eb;
+            font-weight: 600;
+            color: #374151;
+        }
+        .param-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #4b5563;
+        }
+        .required {
+            color: #dc2626;
+            font-weight: 600;
+        }
+        .badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-left: 5px;
+            font-weight: 500;
+        }
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #1e40af;
+        }
+        .info-box.warning {
+            background: #fffbeb;
+            border-left-color: #f59e0b;
+            color: #92400e;
+        }
+        .info-box.success {
+            background: #f0fdf4;
+            border-left-color: #059669;
+            color: #065f46;
+        }
+        .postman-section {
+            background: #fef3c7;
+            border: 2px dashed #f59e0b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .postman-section h3 {
+            color: #92400e;
+            margin-bottom: 15px;
+        }
+        .postman-section h4 {
+            color: #92400e;
+        }
+        footer {
+            background: #1e293b;
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            margin-left: 280px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .content {
+                margin-left: 0;
+                max-width: 100%;
+                padding: 20px;
+            }
+            footer {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+            <h1>TruckApp API Documentation</h1>
+            <p>Complete API reference for developers | Django REST Framework + JWT</p>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#quick-start">Quick Start</a></li>
+                <li><a href="#postman">Postman Collection</a></li>
+                <li><a href="#authentication">Authentication</a></li>
+                <li><a href="#auth-endpoints">Auth Endpoints</a></li>
+                <li><a href="#users">Users</a></li>
+                <li><a href="#jobs">Jobs</a></li>
+                <li><a href="#drivers">Drivers</a></li>
+                <li><a href="#payments">Payments</a></li>
+                <li><a href="#ratings">Ratings</a></li>
+                <li><a href="#notifications">Notifications</a></li>
+                <li><a href="#config">Configurations</a></li>
+                <li><a href="#workflow">Job Workflow</a></li>
+                <li><a href="#errors">Error Responses</a></li>
+                <li><a href="#examples">Code Examples</a></li>
+            </ul>
+        </aside>
+
+        <main class="content">
+            <div id="overview" class="section">
+                <h2>Overview</h2>
+                <p><strong>Base URL:</strong> <code>http://localhost:8000/api</code> (Development)</p>
+                <p><strong>Production URL:</strong> <code>https://your-domain.com/api</code></p>
+                <p><strong>Content Type:</strong> <code>application/json</code></p>
+                <p><strong>Authentication:</strong> JWT (JSON Web Tokens)</p>
+                <p><strong>API Version:</strong> 1.0</p>
+
+                <h3>Key Features</h3>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                    <li>User registration (Customer & Driver)</li>
+                    <li>JWT authentication with token refresh</li>
+                    <li>Job creation with real-time pricing calculation</li>
+                    <li>Complete job lifecycle management</li>
+                    <li>Real-time location tracking</li>
+                    <li>Payment processing (Paystack integration)</li>
+                    <li>Bidirectional rating system</li>
+                    <li>Driver availability management</li>
+                    <li>Push notifications (FCM)</li>
+                    <li>Distance-based driver matching</li>
+                </ul>
+
+                <div class="info-box success" style="margin-top: 20px;">
+                    <strong>Production Ready:</strong> The API is production-ready with real pricing calculation, state machine validation, and comprehensive security features.
+                </div>
+            </div>
+
+            <div id="quick-start" class="section">
+                <h2>Quick Start for Frontend Developers</h2>
+
+                <h3>Step 1: Get Configuration Data</h3>
+                <p>Before creating jobs, fetch available vehicle types and item categories:</p>
+                <div class="code-block">GET /api/config/vehicle-types/
+GET /api/config/item-categories/</div>
+
+                <h3>Step 2: Register Users</h3>
+                <div class="code-block">POST /api/auth/register/customer/
+POST /api/auth/register/driver/</div>
+
+                <h3>Step 3: Login</h3>
+                <div class="code-block">POST /api/auth/login/
+
+Response:
+{
+  "access": "token_here",  // Valid for 1 hour
+  "refresh": "token_here"  // Valid for 7 days
+}</div>
+
+                <h3>Step 4: Make Authenticated Requests</h3>
+                <div class="code-block">// Add to all authenticated requests
+Headers: {
+  "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+  "Content-Type": "application/json"
+}</div>
+
+                <h3>Step 5: Create a Job</h3>
+                <div class="code-block">POST /api/jobs/
+// See full example in Jobs section</div>
+
+                <div class="info-box">
+                    <strong>Tip:</strong> Use the Postman collection below to test all endpoints before integrating into your app.
+                </div>
+            </div>
+
+            <div id="postman" class="section">
+                <div class="postman-section">
+                    <h3>Postman Collection</h3>
+                    <p>We've created a complete Postman collection with all endpoints pre-configured for easy testing.</p>
+
+                    <h4>How to Use:</h4>
+                    <ol style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>Download and install <a href="https://www.postman.com/downloads/" target="_blank" style="color: #92400e; text-decoration: underline;">Postman</a></li>
+                        <li>Download the collection file: <code>POSTMAN_COLLECTION.json</code> from project root</li>
+                        <li>Import into Postman (Import button → Upload Files)</li>
+                        <li>Create environment with these variables:
+                            <div class="code-block" style="margin: 10px 0;">base_url: http://localhost:8000/api
+access_token: (auto-set after login)
+refresh_token: (auto-set after login)
+job_id: (auto-set after job creation)</div>
+                        </li>
+                        <li>Start testing! The collection includes all endpoints with sample data</li>
+                    </ol>
+
+                    <h4>Test Flow:</h4>
+                    <ol style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li>Configurations → List Vehicle Types (save ID)</li>
+                        <li>Configurations → List Item Categories (save ID)</li>
+                        <li>Authentication → Register Customer</li>
+                        <li>Authentication → Register Driver</li>
+                        <li>Authentication → Login (tokens auto-saved)</li>
+                        <li>Jobs → Create Job (replace UUIDs with saved IDs)</li>
+                        <li>Jobs → List Jobs</li>
+                        <li>Jobs → Accept Job (login as driver first)</li>
+                        <li>Follow the workflow through completion</li>
+                        <li>Ratings → Submit Rating</li>
+                    </ol>
+
+                    <div class="info-box warning" style="margin-top: 15px;">
+                        <strong>Important:</strong> The Postman collection automatically saves tokens after login. Make sure to select your environment in the top-right dropdown.
+                    </div>
+                </div>
+            </div>
+
+            <div id="authentication" class="section">
+                <h2>Authentication</h2>
+                <p>The API uses JWT tokens for authentication. All protected endpoints require an access token.</p>
+
+                <h3>Token Lifecycle</h3>
+                <table class="param-table">
+                    <tr>
+                        <th>Token Type</th>
+                        <th>Valid Duration</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Access Token</strong></td>
+                        <td>1 hour</td>
+                        <td>Used for API authentication</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Refresh Token</strong></td>
+                        <td>7 days</td>
+                        <td>Used to get new access token</td>
+                    </tr>
+                </table>
+
+                <h3>How to Use Tokens</h3>
+                <div class="code-block">// Include in request headers
+Authorization: Bearer {access_token}
+
+// When access token expires (after 1 hour):
+POST /api/auth/token/refresh/
+{
+  "refresh": "your_refresh_token"
+}
+
+// Response:
+{
+  "access": "new_access_token"
+}</div>
+
+                <div class="info-box">
+                    <strong>Best Practice:</strong> Store tokens securely (AsyncStorage/Keychain for mobile, HttpOnly cookies for web). Never expose tokens in URLs or logs.
+                </div>
+            </div>
+
+            <div id="auth-endpoints" class="section">
+                <h2>Authentication Endpoints</h2>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/auth/register/customer/</span>
+                    </div>
+                    <div class="description">Register a new customer account</div>
+
+                    <h4>Request Body:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>email</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Valid email (must be unique)</td>
+                        </tr>
+                        <tr>
+                            <td>password</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Minimum 8 characters</td>
+                        </tr>
+                        <tr>
+                            <td>password_confirm</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Must match password</td>
+                        </tr>
+                        <tr>
+                            <td>first_name</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Customer first name</td>
+                        </tr>
+                        <tr>
+                            <td>last_name</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Customer last name</td>
+                        </tr>
+                        <tr>
+                            <td>phone_number</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Format: +2348012345678 (must be unique)</td>
+                        </tr>
+                    </table>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "email": "customer@example.com",
+  "password": "SecurePass123",
+  "password_confirm": "SecurePass123",
+  "first_name": "John",
+  "last_name": "Doe",
+  "phone_number": "+2348012345678"
+}</div>
+
+                    <div class="response-example">
+                        <strong>Response (201 Created):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "message": "Customer registered successfully",
+  "user": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "email": "customer@example.com",
+    "first_name": "John",
+    "last_name": "Doe",
+    "user_type": "customer",
+    "phone_number": "+2348012345678",
+    "is_phone_verified": false
+  },
+  "tokens": {
+    "refresh": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+    "access": "eyJ0eXAiOiJKV1QiLCJhbGc..."
+  }
+}</div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/auth/register/driver/</span>
+                    </div>
+                    <div class="description">Register a new driver with vehicle details</div>
+
+                    <h4>Request Body:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>email</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Valid email (must be unique)</td>
+                        </tr>
+                        <tr>
+                            <td>password</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Minimum 8 characters</td>
+                        </tr>
+                        <tr>
+                            <td>password_confirm</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Must match password</td>
+                        </tr>
+                        <tr>
+                            <td>first_name</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Driver first name</td>
+                        </tr>
+                        <tr>
+                            <td>last_name</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Driver last name</td>
+                        </tr>
+                        <tr>
+                            <td>phone_number</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Format: +2348012345678</td>
+                        </tr>
+                        <tr>
+                            <td>license_number</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Driver's license number</td>
+                        </tr>
+                        <tr>
+                            <td>license_expiry</td>
+                            <td>date</td>
+                            <td class="required">Yes</td>
+                            <td>YYYY-MM-DD (must be future date)</td>
+                        </tr>
+                        <tr>
+                            <td>vehicle_type_id</td>
+                            <td>UUID</td>
+                            <td class="required">Yes</td>
+                            <td>Get from /api/config/vehicle-types/</td>
+                        </tr>
+                        <tr>
+                            <td>vehicle_plate_number</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Must be unique</td>
+                        </tr>
+                        <tr>
+                            <td>vehicle_make</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>e.g., Toyota, Honda</td>
+                        </tr>
+                        <tr>
+                            <td>vehicle_model</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>e.g., Hilux, Civic</td>
+                        </tr>
+                        <tr>
+                            <td>vehicle_year</td>
+                            <td>integer</td>
+                            <td class="required">Yes</td>
+                            <td>e.g., 2022</td>
+                        </tr>
+                        <tr>
+                            <td>vehicle_capacity_kg</td>
+                            <td>decimal</td>
+                            <td class="required">Yes</td>
+                            <td>Load capacity in kg</td>
+                        </tr>
+                    </table>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "email": "driver@example.com",
+  "password": "SecurePass123",
+  "password_confirm": "SecurePass123",
+  "first_name": "James",
+  "last_name": "Smith",
+  "phone_number": "+2348087654321",
+  "address": "123 Main Street",
+  "city": "Lagos",
+  "state": "Lagos",
+  "license_number": "LAG123456",
+  "license_expiry": "2026-12-31",
+  "vehicle_type_id": "550e8400-e29b-41d4-a716-446655440000",
+  "vehicle_make": "Toyota",
+  "vehicle_model": "Hilux",
+  "vehicle_year": 2022,
+  "vehicle_plate_number": "LAG-123-AB",
+  "vehicle_capacity_kg": 1000,
+  "vehicle_photos": [
+    "https://storage.blob.core.windows.net/truck-front.jpg",
+    "https://storage.blob.core.windows.net/truck-side.jpg",
+    "https://storage.blob.core.windows.net/truck-back.jpg",
+    "https://storage.blob.core.windows.net/truck-interior.jpg",
+    "https://storage.blob.core.windows.net/truck-license-plate.jpg"
+  ]
+}</div>
+                    <p style="margin-top: 10px; color: #6b7280; font-size: 0.9em;">Note: vehicle_photos is optional. You can upload 1-5 vehicle photos during registration or add them later via /api/drivers/me/vehicle-photos/</p>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/auth/login/</span>
+                    </div>
+                    <div class="description">Login and obtain JWT tokens</div>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "email": "user@example.com",
+  "password": "SecurePass123"
+}</div>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "access": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com",
+    "first_name": "John",
+    "last_name": "Doe",
+    "user_type": "customer",
+    "phone_number": "+2348012345678"
+  }
+}</div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/auth/token/refresh/</span>
+                    </div>
+                    <div class="description">Get new access token using refresh token</div>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGc..."
+}</div>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "access": "eyJ0eXAiOiJKV1QiLCJhbGc..."
+}</div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/auth/logout/</span>
+                    </div>
+                    <div class="description">Logout and blacklist refresh token</div>
+                    <span class="auth-required">Authentication Required</span>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGc..."
+}</div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/auth/password/reset/request/</span>
+                    </div>
+                    <div class="description">Request password reset (forgot password)</div>
+
+                    <h4>Request Body:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>email</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Email address of the account</td>
+                        </tr>
+                    </table>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "email": "user@example.com"
+}</div>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "message": "Password reset instructions sent to user@example.com",
+  "token": "abc123xyz..."
+}</div>
+                        <p style="margin-top: 10px; color: #6b7280; font-size: 0.9em;">Note: In production, the token would be sent via email. Token expires in 1 hour.</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/auth/password/reset/confirm/</span>
+                    </div>
+                    <div class="description">Confirm password reset with token</div>
+
+                    <h4>Request Body:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>token</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Reset token from email/request</td>
+                        </tr>
+                        <tr>
+                            <td>new_password</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>New password (min 8 characters)</td>
+                        </tr>
+                        <tr>
+                            <td>new_password_confirm</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Must match new_password</td>
+                        </tr>
+                    </table>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "token": "abc123xyz...",
+  "new_password": "NewSecurePass123",
+  "new_password_confirm": "NewSecurePass123"
+}</div>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "message": "Password has been reset successfully"
+}</div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/auth/password/change/</span>
+                    </div>
+                    <div class="description">Change password for authenticated user</div>
+                    <span class="auth-required">Authentication Required</span>
+
+                    <h4>Request Body:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>old_password</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Current password</td>
+                        </tr>
+                        <tr>
+                            <td>new_password</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>New password (min 8 characters)</td>
+                        </tr>
+                        <tr>
+                            <td>new_password_confirm</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Must match new_password</td>
+                        </tr>
+                    </table>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "old_password": "OldPassword123",
+  "new_password": "NewSecurePass123",
+  "new_password_confirm": "NewSecurePass123"
+}</div>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "message": "Password changed successfully"
+}</div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/auth/email/verify/request/</span>
+                    </div>
+                    <div class="description">Request email verification code</div>
+                    <span class="auth-required">Authentication Required</span>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{}</div>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "message": "Verification code sent to user@example.com",
+  "code": "123456"
+}</div>
+                        <p style="margin-top: 10px; color: #6b7280; font-size: 0.9em;">Note: In production, the code would be sent via email. Code expires in 15 minutes.</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/auth/email/verify/confirm/</span>
+                    </div>
+                    <div class="description">Confirm email verification with code</div>
+                    <span class="auth-required">Authentication Required</span>
+
+                    <h4>Request Body:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>code</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>6-digit verification code</td>
+                        </tr>
+                    </table>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "code": "123456"
+}</div>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "message": "Email verified successfully"
+}</div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/auth/phone/verify/request/</span>
+                    </div>
+                    <div class="description">Request phone verification code (mock implementation)</div>
+                    <span class="auth-required">Authentication Required</span>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "message": "Verification code sent to +2348012345678"
+}</div>
+                        <p style="margin-top: 10px; color: #6b7280; font-size: 0.9em;">Note: This is a mock implementation. In production, integrate with SMS provider.</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/auth/phone/verify/confirm/</span>
+                    </div>
+                    <div class="description">Confirm phone verification with code</div>
+                    <span class="auth-required">Authentication Required</span>
+
+                    <h4>Request Body:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>code</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>6-digit verification code</td>
+                        </tr>
+                    </table>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "code": "123456"
+}</div>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "message": "Phone number verified successfully"
+}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="users" class="section">
+                <h2>Users</h2>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/users/me/</span>
+                    </div>
+                    <div class="description">Get current user profile</div>
+                    <span class="auth-required">Authentication Required</span>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method patch">PATCH</span>
+                        <span class="url">/api/users/me/</span>
+                    </div>
+                    <div class="description">Update current user profile</div>
+                    <span class="auth-required">Authentication Required</span>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "first_name": "John",
+  "last_name": "Doe Updated",
+  "phone_number": "+2348012345678"
+}</div>
+                </div>
+            </div>
+
+            <div id="jobs" class="section">
+                <h2>Jobs</h2>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/jobs/</span>
+                    </div>
+                    <div class="description">Create a new delivery job with automatic pricing calculation</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Customer Only</span>
+
+                    <h4>Request Body:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>vehicle_type_id</td>
+                            <td>UUID</td>
+                            <td class="required">Yes</td>
+                            <td>From /api/config/vehicle-types/</td>
+                        </tr>
+                        <tr>
+                            <td>pickup_address</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Full pickup address</td>
+                        </tr>
+                        <tr>
+                            <td>pickup_city</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>City name</td>
+                        </tr>
+                        <tr>
+                            <td>pickup_state</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>State name</td>
+                        </tr>
+                        <tr>
+                            <td>pickup_lat</td>
+                            <td>decimal</td>
+                            <td class="required">Yes</td>
+                            <td>Latitude coordinate</td>
+                        </tr>
+                        <tr>
+                            <td>pickup_lng</td>
+                            <td>decimal</td>
+                            <td class="required">Yes</td>
+                            <td>Longitude coordinate</td>
+                        </tr>
+                        <tr>
+                            <td>pickup_contact_name</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Contact person name</td>
+                        </tr>
+                        <tr>
+                            <td>pickup_contact_phone</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Contact phone number</td>
+                        </tr>
+                        <tr>
+                            <td>delivery_address</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Full delivery address</td>
+                        </tr>
+                        <tr>
+                            <td>delivery_lat</td>
+                            <td>decimal</td>
+                            <td class="required">Yes</td>
+                            <td>Latitude coordinate</td>
+                        </tr>
+                        <tr>
+                            <td>delivery_lng</td>
+                            <td>decimal</td>
+                            <td class="required">Yes</td>
+                            <td>Longitude coordinate</td>
+                        </tr>
+                        <tr>
+                            <td>items</td>
+                            <td>array</td>
+                            <td class="required">Yes</td>
+                            <td>Array of items (minimum 1)</td>
+                        </tr>
+                        <tr>
+                            <td>is_scheduled</td>
+                            <td>boolean</td>
+                            <td>No</td>
+                            <td>Default: false</td>
+                        </tr>
+                        <tr>
+                            <td>special_instructions</td>
+                            <td>string</td>
+                            <td>No</td>
+                            <td>Delivery notes</td>
+                        </tr>
+                    </table>
+
+                    <h4>Items Array Format:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>category_id</td>
+                            <td>UUID</td>
+                            <td class="required">Yes</td>
+                            <td>From /api/config/item-categories/</td>
+                        </tr>
+                        <tr>
+                            <td>description</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Item description</td>
+                        </tr>
+                        <tr>
+                            <td>weight_kg</td>
+                            <td>decimal</td>
+                            <td class="required">Yes</td>
+                            <td>Weight per unit</td>
+                        </tr>
+                        <tr>
+                            <td>quantity</td>
+                            <td>integer</td>
+                            <td class="required">Yes</td>
+                            <td>Number of items</td>
+                        </tr>
+                    </table>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "vehicle_type_id": "550e8400-e29b-41d4-a716-446655440000",
+  "pickup_address": "123 Pickup Street",
+  "pickup_city": "Lagos",
+  "pickup_state": "Lagos",
+  "pickup_lat": 6.5244,
+  "pickup_lng": 3.3792,
+  "pickup_contact_name": "John Doe",
+  "pickup_contact_phone": "+2348012345678",
+  "delivery_address": "456 Delivery Avenue",
+  "delivery_city": "Ibadan",
+  "delivery_state": "Oyo",
+  "delivery_lat": 7.3775,
+  "delivery_lng": 3.9470,
+  "delivery_contact_name": "Jane Smith",
+  "delivery_contact_phone": "+2348087654321",
+  "is_scheduled": false,
+  "special_instructions": "Handle with care",
+  "items": [
+    {
+      "category_id": "650e8400-e29b-41d4-a716-446655440001",
+      "description": "Electronics - Laptop",
+      "weight_kg": 5.5,
+      "quantity": 1
+    }
+  ]
+}</div>
+
+                    <div class="response-example">
+                        <strong>Response (201 Created):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "id": "750e8400-e29b-41d4-a716-446655440002",
+  "status": "pending",
+  "distance_km": "120.50",
+  "final_price": "15000.00",
+  "platform_fee": "1500.00",
+  "driver_earnings": "13500.00",
+  "commitment_fee": "7500.00",
+  "created_at": "2025-12-03T10:00:00Z",
+  "pickup_address": "123 Pickup Street",
+  "delivery_address": "456 Delivery Avenue"
+}</div>
+                    </div>
+
+                    <div class="info-box warning">
+                        <strong>Important:</strong> Total weight of all items must not exceed the vehicle's capacity. A payment record (50% commitment fee) is automatically created upon job creation.
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/jobs/</span>
+                    </div>
+                    <div class="description">List user's jobs (customer sees their jobs, driver sees assigned jobs)</div>
+                    <span class="auth-required">Authentication Required</span>
+
+                    <h4>Query Parameters:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>status</td>
+                            <td>string</td>
+                            <td>Filter by: pending, driver_assigned, pickup_confirmed, in_transit, delivered, completed</td>
+                        </tr>
+                        <tr>
+                            <td>page</td>
+                            <td>integer</td>
+                            <td>Page number for pagination</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/jobs/{id}/</span>
+                    </div>
+                    <div class="description">Get detailed job information</div>
+                    <span class="auth-required">Authentication Required</span>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/jobs/requests/</span>
+                    </div>
+                    <div class="description">List available jobs for drivers (pending jobs matching driver's vehicle type)</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Driver Only</span>
+
+                    <h4>Query Parameters:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>lat</td>
+                            <td>decimal</td>
+                            <td>Current driver latitude</td>
+                        </tr>
+                        <tr>
+                            <td>lng</td>
+                            <td>decimal</td>
+                            <td>Current driver longitude</td>
+                        </tr>
+                        <tr>
+                            <td>radius</td>
+                            <td>integer</td>
+                            <td>Search radius in km (default: 50)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/jobs/{id}/accept/</span>
+                    </div>
+                    <div class="description">Driver accepts a pending job</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Driver Only</span>
+                    <p style="margin-top: 10px;"><strong>Status Transition:</strong> pending → driver_assigned</p>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/jobs/{id}/customer-confirm-pickup/</span>
+                    </div>
+                    <div class="description">Customer confirms items have been picked up by driver</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Customer Only</span>
+                    <p style="margin-top: 10px;"><strong>Status Transition:</strong> driver_assigned → pickup_confirmed</p>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/jobs/{id}/start-delivery/</span>
+                    </div>
+                    <div class="description">Driver starts the delivery journey</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Driver Only</span>
+                    <p style="margin-top: 10px;"><strong>Status Transition:</strong> pickup_confirmed → in_transit</p>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/jobs/{id}/update-location/</span>
+                    </div>
+                    <div class="description">Update driver's current location during delivery</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Driver Only</span>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "latitude": 6.5244,
+  "longitude": 3.3792,
+  "accuracy": 10.5,
+  "speed": 45.2
+}</div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/jobs/{id}/mark-delivered/</span>
+                    </div>
+                    <div class="description">Driver marks the job as delivered</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Driver Only</span>
+                    <p style="margin-top: 10px;"><strong>Status Transition:</strong> in_transit → delivered</p>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/jobs/{id}/confirm-delivery/</span>
+                    </div>
+                    <div class="description">Customer confirms receipt of delivery</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Customer Only</span>
+                    <p style="margin-top: 10px;"><strong>Status Transition:</strong> delivered → completed</p>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/jobs/{id}/cancel/</span>
+                    </div>
+                    <div class="description">Cancel a job (allowed before completion)</div>
+                    <span class="auth-required">Authentication Required</span>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "reason": "Customer changed mind"
+}</div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/jobs/{id}/dispute/</span>
+                    </div>
+                    <div class="description">Create a dispute (only from delivered status)</div>
+                    <span class="auth-required">Authentication Required</span>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "reason": "Items not delivered as expected"
+}</div>
+                </div>
+            </div>
+
+            <div id="drivers" class="section">
+                <h2>Drivers</h2>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/drivers/available/</span>
+                    </div>
+                    <div class="description">Search for available drivers near a location</div>
+                    <span class="auth-required">Authentication Required</span>
+
+                    <h4>Query Parameters:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>lat</td>
+                            <td>decimal</td>
+                            <td class="required">Yes</td>
+                            <td>Search location latitude</td>
+                        </tr>
+                        <tr>
+                            <td>lng</td>
+                            <td>decimal</td>
+                            <td class="required">Yes</td>
+                            <td>Search location longitude</td>
+                        </tr>
+                        <tr>
+                            <td>vehicle_type_id</td>
+                            <td>UUID</td>
+                            <td>No</td>
+                            <td>Filter by vehicle type</td>
+                        </tr>
+                        <tr>
+                            <td>radius</td>
+                            <td>integer</td>
+                            <td>No</td>
+                            <td>Search radius in km (default: 50)</td>
+                        </tr>
+                    </table>
+
+                    <h4>Example:</h4>
+                    <div class="code-block">GET /api/drivers/available/?lat=6.5244&lng=3.3792&radius=30</div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/drivers/toggle-availability/</span>
+                    </div>
+                    <div class="description">Toggle driver online/offline status</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Driver Only</span>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "is_available": true
+}</div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/drivers/me/stats/</span>
+                    </div>
+                    <div class="description">Get driver statistics and earnings summary</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Driver Only</span>
+
+                    <div class="response-example">
+                        <strong>Response Example:</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "total_jobs": 45,
+  "completed_jobs": 42,
+  "total_earnings": "450000.00",
+  "average_rating": 4.8,
+  "acceptance_rate": 93.3
+}</div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/drivers/me/vehicle-photos/</span>
+                    </div>
+                    <div class="description">Get all vehicle photos for authenticated driver</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Driver Only</span>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">[
+  {
+    "id": "uuid",
+    "photo_url": "https://storage.blob.core.windows.net/vehicle1.jpg",
+    "photo_order": 0,
+    "is_primary": true,
+    "created_at": "2024-01-15T10:30:00Z"
+  },
+  {
+    "id": "uuid",
+    "photo_url": "https://storage.blob.core.windows.net/vehicle2.jpg",
+    "photo_order": 1,
+    "is_primary": false,
+    "created_at": "2024-01-15T10:31:00Z"
+  }
+]</div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/drivers/me/vehicle-photos/</span>
+                    </div>
+                    <div class="description">Upload a new vehicle photo (max 5 photos)</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Driver Only</span>
+
+                    <h4>Request Body:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>photo_url</td>
+                            <td>string</td>
+                            <td class="required">Yes</td>
+                            <td>Azure Blob Storage URL of uploaded photo</td>
+                        </tr>
+                        <tr>
+                            <td>photo_order</td>
+                            <td>integer</td>
+                            <td>No</td>
+                            <td>Display order (default: 0)</td>
+                        </tr>
+                        <tr>
+                            <td>is_primary</td>
+                            <td>boolean</td>
+                            <td>No</td>
+                            <td>Set as primary photo (default: false)</td>
+                        </tr>
+                    </table>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "photo_url": "https://storage.blob.core.windows.net/vehicle1.jpg",
+  "photo_order": 0,
+  "is_primary": true
+}</div>
+
+                    <div class="response-example">
+                        <strong>Response (201 Created):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "id": "uuid",
+  "photo_url": "https://storage.blob.core.windows.net/vehicle1.jpg",
+  "photo_order": 0,
+  "is_primary": true,
+  "created_at": "2024-01-15T10:30:00Z"
+}</div>
+                        <p style="margin-top: 10px; color: #6b7280; font-size: 0.9em;">Note: Maximum 5 photos allowed per driver. First photo is automatically set as primary.</p>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method patch">PATCH</span>
+                        <span class="url">/api/drivers/me/vehicle-photos/{photo_id}/</span>
+                    </div>
+                    <div class="description">Update a vehicle photo (change order or set as primary)</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Driver Only</span>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "photo_order": 2,
+  "is_primary": true
+}</div>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "id": "uuid",
+  "photo_url": "https://storage.blob.core.windows.net/vehicle1.jpg",
+  "photo_order": 2,
+  "is_primary": true,
+  "created_at": "2024-01-15T10:30:00Z"
+}</div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method delete">DELETE</span>
+                        <span class="url">/api/drivers/me/vehicle-photos/{photo_id}/</span>
+                    </div>
+                    <div class="description">Delete a vehicle photo</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Driver Only</span>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "message": "Photo deleted successfully"
+}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="payments" class="section">
+                <h2>Payments</h2>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/payments/</span>
+                    </div>
+                    <div class="description">List payment history</div>
+                    <span class="auth-required">Authentication Required</span>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/payments/initialize/{job_id}/</span>
+                    </div>
+                    <div class="description">Initialize payment for a job (Paystack integration)</div>
+                    <span class="auth-required">Authentication Required</span>
+                    <span class="badge">Customer Only</span>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "status": "success",
+  "message": "Payment initialized",
+  "data": {
+    "authorization_url": "https://checkout.paystack.com/xxx",
+    "access_code": "xxx",
+    "reference": "TRK_xxx"
+  }
+}</div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/payments/verify/{reference}/</span>
+                    </div>
+                    <div class="description">Verify payment status with Paystack</div>
+                    <span class="auth-required">Authentication Required</span>
+                </div>
+            </div>
+
+            <div id="ratings" class="section">
+                <h2>Ratings</h2>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/ratings/</span>
+                    </div>
+                    <div class="description">Submit a rating after job completion</div>
+                    <span class="auth-required">Authentication Required</span>
+
+                    <h4>Request Body:</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>job_id</td>
+                            <td>UUID</td>
+                            <td class="required">Yes</td>
+                            <td>Completed job ID</td>
+                        </tr>
+                        <tr>
+                            <td>rating</td>
+                            <td>integer</td>
+                            <td class="required">Yes</td>
+                            <td>1-5 stars</td>
+                        </tr>
+                        <tr>
+                            <td>review</td>
+                            <td>string</td>
+                            <td>No</td>
+                            <td>Text review</td>
+                        </tr>
+                        <tr>
+                            <td>professionalism</td>
+                            <td>integer</td>
+                            <td>No</td>
+                            <td>1-5 stars</td>
+                        </tr>
+                        <tr>
+                            <td>timeliness</td>
+                            <td>integer</td>
+                            <td>No</td>
+                            <td>1-5 stars</td>
+                        </tr>
+                        <tr>
+                            <td>vehicle_condition</td>
+                            <td>integer</td>
+                            <td>No</td>
+                            <td>1-5 stars (driver ratings only)</td>
+                        </tr>
+                    </table>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "job_id": "750e8400-e29b-41d4-a716-446655440002",
+  "rating": 5,
+  "review": "Excellent service! Very professional driver.",
+  "professionalism": 5,
+  "timeliness": 5,
+  "vehicle_condition": 4
+}</div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/ratings/</span>
+                    </div>
+                    <div class="description">List ratings received by current user</div>
+                    <span class="auth-required">Authentication Required</span>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/ratings/stats/</span>
+                    </div>
+                    <div class="description">Get rating statistics and breakdown</div>
+                    <span class="auth-required">Authentication Required</span>
+                </div>
+            </div>
+
+            <div id="notifications" class="section">
+                <h2>Notifications</h2>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/notifications/</span>
+                    </div>
+                    <div class="description">List user notifications</div>
+                    <span class="auth-required">Authentication Required</span>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method patch">PATCH</span>
+                        <span class="url">/api/notifications/{id}/read/</span>
+                    </div>
+                    <div class="description">Mark notification as read</div>
+                    <span class="auth-required">Authentication Required</span>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/notifications/register-device/</span>
+                    </div>
+                    <div class="description">Register FCM device token for push notifications</div>
+                    <span class="auth-required">Authentication Required</span>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "registration_id": "fcm_token_here",
+  "type": "android"
+}</div>
+                </div>
+            </div>
+
+            <div id="config" class="section">
+                <h2>Configurations</h2>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/config/vehicle-types/</span>
+                    </div>
+                    <div class="description">List all available vehicle types</div>
+
+                    <div class="response-example">
+                        <strong>Response Example:</strong>
+                        <div class="code-block" style="margin-top: 10px;">[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Motorcycle",
+    "description": "Small packages",
+    "max_weight_kg": "50.00",
+    "pricing_multiplier": "0.80",
+    "is_active": true
+  },
+  {
+    "id": "650e8400-e29b-41d4-a716-446655440001",
+    "name": "Pickup Truck",
+    "description": "Large deliveries",
+    "max_weight_kg": "1000.00",
+    "pricing_multiplier": "1.50",
+    "is_active": true
+  }
+]</div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="url">/api/config/item-categories/</span>
+                    </div>
+                    <div class="description">List all item categories</div>
+
+                    <div class="response-example">
+                        <strong>Response Example:</strong>
+                        <div class="code-block" style="margin-top: 10px;">[
+  {
+    "id": "750e8400-e29b-41d4-a716-446655440002",
+    "name": "Electronics",
+    "description": "Fragile items",
+    "pricing_multiplier": "1.30",
+    "is_active": true
+  },
+  {
+    "id": "850e8400-e29b-41d4-a716-446655440003",
+    "name": "Household",
+    "description": "Furniture and appliances",
+    "pricing_multiplier": "1.00",
+    "is_active": true
+  }
+]</div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="url">/api/config/calculate-price/</span>
+                    </div>
+                    <div class="description">Calculate delivery price before creating a job</div>
+
+                    <h4>Example Request:</h4>
+                    <div class="code-block">{
+  "pickup_lat": 6.5244,
+  "pickup_lng": 3.3792,
+  "delivery_lat": 7.3775,
+  "delivery_lng": 3.9470,
+  "vehicle_type_id": "550e8400-e29b-41d4-a716-446655440000",
+  "items": [
+    {
+      "category_id": "750e8400-e29b-41d4-a716-446655440002",
+      "weight_kg": 5.5,
+      "quantity": 1
+    }
+  ]
+}</div>
+
+                    <div class="response-example">
+                        <strong>Response (200 OK):</strong>
+                        <div class="code-block" style="margin-top: 10px;">{
+  "distance_km": "120.50",
+  "total_weight_kg": "5.50",
+  "final_price": "15000.00",
+  "platform_fee": "1500.00",
+  "driver_earnings": "13500.00"
+}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="workflow" class="section">
+                <h2>Job Status Workflow</h2>
+                <p>Jobs follow a strict state machine. Invalid transitions will be rejected.</p>
+
+                <div style="background: #f9fafb; padding: 25px; margin: 20px 0; border-radius: 8px; font-family: monospace; font-size: 1.1em; line-height: 2; border: 1px solid #e5e7eb;">
+                    <strong style="color: #1e3a8a;">1. pending</strong><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;↓ Driver accepts job<br>
+                    <strong style="color: #1e3a8a;">2. driver_assigned</strong><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;↓ Customer confirms pickup<br>
+                    <strong style="color: #1e3a8a;">3. pickup_confirmed</strong><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;↓ Driver starts delivery<br>
+                    <strong style="color: #1e3a8a;">4. in_transit</strong><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;↓ Driver marks as delivered<br>
+                    <strong style="color: #1e3a8a;">5. delivered</strong><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;↓ Customer confirms delivery<br>
+                    <strong style="color: #059669;">6. completed</strong>
+                </div>
+
+                <h3>Alternative Paths</h3>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                    <li><strong>Cancellation:</strong> Can happen from pending, driver_assigned, or pickup_confirmed → cancelled_by_customer / cancelled_by_driver</li>
+                    <li><strong>Dispute:</strong> Can be created from delivered status → disputed</li>
+                    <li><strong>Dispute Resolution:</strong> disputed → completed (admin action)</li>
+                </ul>
+
+                <div class="info-box warning" style="margin-top: 20px;">
+                    <strong>Important:</strong> You cannot skip steps. For example, you cannot go from "pending" directly to "in_transit". Each step must be completed in order.
+                </div>
+            </div>
+
+            <div id="errors" class="section">
+                <h2>Error Responses</h2>
+
+                <h3>HTTP Status Codes</h3>
+                <table class="param-table">
+                    <tr>
+                        <th>Code</th>
+                        <th>Meaning</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><strong>200</strong></td>
+                        <td>OK</td>
+                        <td>Request successful</td>
+                    </tr>
+                    <tr>
+                        <td><strong>201</strong></td>
+                        <td>Created</td>
+                        <td>Resource created successfully</td>
+                    </tr>
+                    <tr>
+                        <td><strong>400</strong></td>
+                        <td>Bad Request</td>
+                        <td>Invalid request data or validation error</td>
+                    </tr>
+                    <tr>
+                        <td><strong>401</strong></td>
+                        <td>Unauthorized</td>
+                        <td>Missing or invalid authentication token</td>
+                    </tr>
+                    <tr>
+                        <td><strong>403</strong></td>
+                        <td>Forbidden</td>
+                        <td>Insufficient permissions (e.g., driver trying to create job)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>404</strong></td>
+                        <td>Not Found</td>
+                        <td>Resource not found</td>
+                    </tr>
+                    <tr>
+                        <td><strong>500</strong></td>
+                        <td>Server Error</td>
+                        <td>Internal server error</td>
+                    </tr>
+                </table>
+
+                <h3>Error Response Format</h3>
+                <div class="code-block">{
+  "error": "Error message here"
+}
+
+// OR for validation errors:
+{
+  "field_name": ["Error message for this field"],
+  "another_field": ["Another error message"]
+}</div>
+
+                <h3>Common Errors</h3>
+
+                <h4>Authentication Error (401)</h4>
+                <div class="code-block">{
+  "detail": "Authentication credentials were not provided."
+}
+
+// OR
+{
+  "detail": "Given token not valid for any token type"
+}</div>
+
+                <h4>Validation Error (400)</h4>
+                <div class="code-block">{
+  "email": ["This field is required."],
+  "phone_number": ["Phone number already registered"],
+  "password": ["This password is too short. It must contain at least 8 characters."]
+}</div>
+
+                <h4>Permission Denied (403)</h4>
+                <div class="code-block">{
+  "error": "Only customers can create jobs"
+}
+
+// OR
+{
+  "error": "Only drivers can accept jobs"
+}</div>
+
+                <h4>State Transition Error (400)</h4>
+                <div class="code-block">{
+  "error": "Cannot transition from 'pending' to 'completed'"
+}</div>
+
+                <h4>Weight Capacity Error (400)</h4>
+                <div class="code-block">{
+  "items": "Total weight (150.5kg) exceeds vehicle capacity (100kg)"
+}</div>
+            </div>
+
+            <div id="examples" class="section">
+                <h2>Code Examples for Frontend</h2>
+
+                <h3>React / React Native Example</h3>
+                <div class="code-block">// api.js - Create this helper file
+const API_BASE = 'http://localhost:8000/api';
+
+let accessToken = null;
+let refreshToken = null;
+
+// Login function
+export async function login(email, password) {
+  const response = await fetch(`${API_BASE}/auth/login/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+
+  const data = await response.json();
+
+  if (response.ok) {
+    accessToken = data.access;
+    refreshToken = data.refresh;
+    // Save to AsyncStorage/localStorage
+    return data.user;
+  } else {
+    throw new Error(data.error || 'Login failed');
+  }
+}
+
+// Authenticated request helper
+export async function apiCall(endpoint, options = {}) {
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers
+  };
+
+  if (accessToken) {
+    headers['Authorization'] = `Bearer ${accessToken}`;
+  }
+
+  let response = await fetch(`${API_BASE}${endpoint}`, {
+    ...options,
+    headers
+  });
+
+  // Handle token refresh if expired
+  if (response.status === 401 && refreshToken) {
+    const refreshResponse = await fetch(`${API_BASE}/auth/token/refresh/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh: refreshToken })
+    });
+
+    if (refreshResponse.ok) {
+      const refreshData = await refreshResponse.json();
+      accessToken = refreshData.access;
+      // Retry original request
+      headers['Authorization'] = `Bearer ${accessToken}`;
+      response = await fetch(`${API_BASE}${endpoint}`, {
+        ...options,
+        headers
+      });
+    }
+  }
+
+  return response.json();
+}
+
+// Usage examples:
+
+// Create a job
+async function createJob(jobData) {
+  try {
+    const job = await apiCall('/jobs/', {
+      method: 'POST',
+      body: JSON.stringify(jobData)
+    });
+    console.log('Job created:', job);
+    return job;
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// List jobs
+async function getJobs(status = null) {
+  const url = status ? `/jobs/?status=${status}` : '/jobs/';
+  return await apiCall(url);
+}
+
+// Calculate price before creating job
+async function calculatePrice(priceData) {
+  return await apiCall('/config/calculate-price/', {
+    method: 'POST',
+    body: JSON.stringify(priceData)
+  });
+}</div>
+
+                <h3>Flutter / Dart Example</h3>
+                <div class="code-block">// api_service.dart
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class ApiService {
+  static const String baseUrl = 'http://localhost:8000/api';
+  static String? accessToken;
+  static String? refreshToken;
+
+  // Login
+  static Future&lt;Map&lt;String, dynamic&gt;&gt; login(String email, String password) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/login/'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'password': password}),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      accessToken = data['access'];
+      refreshToken = data['refresh'];
+      // Save to secure storage
+      return data['user'];
+    } else {
+      throw Exception('Login failed');
+    }
+  }
+
+  // Authenticated request
+  static Future&lt;dynamic&gt; apiCall(
+    String endpoint, {
+    String method = 'GET',
+    Map? body,
+  }) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      if (accessToken != null) 'Authorization': 'Bearer $accessToken',
+    };
+
+    final uri = Uri.parse('$baseUrl$endpoint');
+    http.Response response;
+
+    if (method == 'GET') {
+      response = await http.get(uri, headers: headers);
+    } else if (method == 'POST') {
+      response = await http.post(
+        uri,
+        headers: headers,
+        body: jsonEncode(body),
+      );
+    } else if (method == 'PATCH') {
+      response = await http.patch(
+        uri,
+        headers: headers,
+        body: jsonEncode(body),
+      );
+    } else {
+      throw Exception('Unsupported method');
+    }
+
+    // Handle token refresh
+    if (response.statusCode == 401 && refreshToken != null) {
+      final refreshResponse = await http.post(
+        Uri.parse('$baseUrl/auth/token/refresh/'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'refresh': refreshToken}),
+      );
+
+      if (refreshResponse.statusCode == 200) {
+        final data = jsonDecode(refreshResponse.body);
+        accessToken = data['access'];
+        // Retry request
+        return await apiCall(endpoint, method: method, body: body);
+      }
+    }
+
+    return jsonDecode(response.body);
+  }
+
+  // Create job
+  static Future&lt;Map&lt;String, dynamic&gt;&gt; createJob(Map&lt;String, dynamic&gt; jobData) async {
+    return await apiCall('/jobs/', method: 'POST', body: jobData);
+  }
+
+  // Get vehicle types
+  static Future&lt;List&gt; getVehicleTypes() async {
+    return await apiCall('/config/vehicle-types/');
+  }
+}</div>
+
+                <h3>JavaScript / Axios Example</h3>
+                <div class="code-block">// axiosConfig.js
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://localhost:8000/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Request interceptor to add token
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Response interceptor to handle token refresh
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshToken = localStorage.getItem('refresh_token');
+        const response = await axios.post(
+          'http://localhost:8000/api/auth/token/refresh/',
+          { refresh: refreshToken }
+        );
+
+        const { access } = response.data;
+        localStorage.setItem('access_token', access);
+
+        originalRequest.headers.Authorization = `Bearer ${access}`;
+        return api(originalRequest);
+      } catch (refreshError) {
+        // Redirect to login
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export default api;
+
+// Usage:
+// import api from './axiosConfig';
+// const jobs = await api.get('/jobs/');
+// const newJob = await api.post('/jobs/', jobData);</div>
+
+                <div class="info-box success" style="margin-top: 20px;">
+                    <strong>Pro Tips:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Always handle token refresh automatically in your API client</li>
+                        <li>Store tokens securely (never in localStorage for sensitive apps)</li>
+                        <li>Test all endpoints with Postman before integrating</li>
+                        <li>Handle errors gracefully and show user-friendly messages</li>
+                        <li>Use environment variables for API base URL</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p><strong>TruckApp API v1.0</strong> - Built with Django REST Framework</p>
+        <p style="margin-top: 10px; opacity: 0.8;">Last Updated: 2025-12-03</p>
+        <p style="margin-top: 5px; opacity: 0.7;">Need help? Check the Postman collection or contact support</p>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight active section in sidebar
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.sidebar a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

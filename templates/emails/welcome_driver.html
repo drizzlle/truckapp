@@ -1,0 +1,29 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Welcome to TruckApp - Driver{% endblock %}
+
+{% block content %}
+<h2>Welcome to TruckApp, {{ first_name }}!</h2>
+
+<p>Thank you for joining TruckApp as a driver. We're thrilled to have you as part of our logistics network.</p>
+
+<p>Your driver account has been successfully created. Once your profile is verified, you can start accepting jobs and earning money.</p>
+
+<div class="info-box">
+    <strong>Next Steps:</strong>
+    <ul style="margin: 10px 0; padding-left: 20px;">
+        <li>Complete your KYC verification process</li>
+        <li>Upload your vehicle photos (minimum 5 required)</li>
+        <li>Set your availability status to start receiving jobs</li>
+        <li>Maintain high ratings to get more opportunities</li>
+    </ul>
+</div>
+
+<p><strong>Important:</strong> Ensure all your documents and vehicle information are accurate to avoid delays in verification.</p>
+
+<div class="divider"></div>
+
+<p style="font-size: 14px; color: #666666;">
+    Questions about driver requirements? Contact us at drivers@truckapp.com
+</p>
+{% endblock %}

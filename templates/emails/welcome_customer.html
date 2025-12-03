@@ -1,0 +1,29 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Welcome to TruckApp{% endblock %}
+
+{% block content %}
+<h2>Welcome to TruckApp, {{ first_name }}!</h2>
+
+<p>Thank you for joining TruckApp. We're excited to help you with all your logistics and transportation needs.</p>
+
+<p>Your account has been successfully created. You can now start booking trucks and managing your shipments with ease.</p>
+
+<div class="info-box">
+    <strong>Getting Started:</strong>
+    <ul style="margin: 10px 0; padding-left: 20px;">
+        <li>Browse available vehicles and drivers in your area</li>
+        <li>Create your first shipment request</li>
+        <li>Track your deliveries in real-time</li>
+        <li>Rate your experience after each job</li>
+    </ul>
+</div>
+
+<p>If you have any questions or need assistance, our support team is here to help.</p>
+
+<div class="divider"></div>
+
+<p style="font-size: 14px; color: #666666;">
+    Need help? Contact us at support@truckapp.com
+</p>
+{% endblock %}
