@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
@@ -14,6 +15,7 @@ def api_docs(request):
     return render(request, "pages/api_docs.html")
 
 
+@csrf_exempt
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def join_waiting_list(request):

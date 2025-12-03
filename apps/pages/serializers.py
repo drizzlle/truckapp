@@ -11,4 +11,3 @@ class WaitingListSerializer(serializers.ModelSerializer):
         if WaitingList.objects.filter(email=value).exists():
             raise serializers.ValidationError("This email is already on the waiting list.")
         return value.lower()
-
