@@ -35,6 +35,14 @@
         font-size: 2rem;
         color: #1e3a8a;
     }
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #1e3a8a;
+        box-shadow: 0 0 0 0.2rem rgba(30, 58, 138, 0.15);
+    }
+    .mt-n5 {
+        margin-top: -3rem;
+    }
 </style>
 {% endblock %}
 
@@ -48,15 +56,45 @@
 </div>
 
 <div class="container">
-    <div class="row mb-5">
-        <div class="col-lg-8 mx-auto text-center">
+    <div class="row mb-5 align-items-center py-5">
+        <div class="col-lg-7 mb-4 mb-lg-0">
             <h2 class="mb-4">Your Trusted Logistics Partner Across Nigeria</h2>
             <p class="lead text-muted">
                 TruckApp connects customers who need to move goods with reliable, verified drivers across Nigeria. 
                 From Lagos to Abuja, Port Harcourt to Kano, we handle everything—products, equipment, livestock, 
-                and more. Whether you're moving goods across town or shipping to another state, we make logistics 
+                and more.
+            </p>
+            <p class="text-muted">
+                Whether you're moving goods across town or shipping to another state, we make logistics 
                 simple, fast, and affordable.
             </p>
+        </div>
+        <div class="col-lg-5">
+            <div class="card border-0 shadow">
+                <div class="card-body p-4">
+                    <h4 class="text-center mb-2">Get Early Access</h4>
+                    <p class="text-center text-muted small mb-4">Be the first to know when we launch!</p>
+                    
+                    <form id="waitingListForm">
+                        <div class="mb-3">
+                            <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email">
+                        </div>
+                        <div class="mb-3">
+                            <select class="form-select" id="userType" name="user_type" required>
+                                <option value="">I am interested as...</option>
+                                <option value="customer">Customer (I need to move goods)</option>
+                                <option value="driver">Driver (I want to earn)</option>
+                                <option value="both">Both</option>
+                            </select>
+                        </div>
+                        <div id="formMessage" class="alert" style="display: none;"></div>
+                        <button type="submit" class="btn btn-primary w-100" id="submitBtn">
+                            <span id="btnText">Join Waiting List</span>
+                            <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2" style="display: none;"></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -190,13 +228,58 @@
         </div>
     </div>
 
-    <div class="row mb-5">
-        <div class="col-lg-8 mx-auto text-center">
-            <div class="alert alert-info border-0">
-                <h5 class="alert-heading">Coming Soon!</h5>
-                <p class="mb-0">We're putting the finishing touches on the platform. Sign up to be notified when we launch and get exclusive early access.</p>
-            </div>
-        </div>
-    </div>
 </div>
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+document.getElementById('waitingListForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnSpinner = document.getElementById('btnSpinner');
+    const formMessage = document.getElementById('formMessage');
+    
+    // Disable button and show spinner
+    submitBtn.disabled = true;
+    btnSpinner.style.display = 'inline-block';
+    formMessage.style.display = 'none';
+    
+    const formData = {
+        email: document.getElementById('email').value,
+        user_type: document.getElementById('userType').value
+    };
+    
+    try {
+        const response = await fetch('/api/waiting-list/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            formMessage.className = 'alert alert-success';
+            formMessage.textContent = data.message;
+            formMessage.style.display = 'block';
+            document.getElementById('waitingListForm').reset();
+        } else {
+            formMessage.className = 'alert alert-danger';
+            formMessage.textContent = data.email ? data.email[0] : 'Something went wrong. Please try again.';
+            formMessage.style.display = 'block';
+        }
+    } catch (error) {
+        formMessage.className = 'alert alert-danger';
+        formMessage.textContent = 'Network error. Please check your connection and try again.';
+        formMessage.style.display = 'block';
+    } finally {
+        submitBtn.disabled = false;
+        btnSpinner.style.display = 'none';
+    }
+});
+</script>
+{% endblock %}
