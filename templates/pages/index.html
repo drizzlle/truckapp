@@ -1,10 +1,202 @@
 {% extends "base.html" %}
-{% block title %}Home - Truck App{% endblock title %}
+{% block title %}TruckApp - Smart Logistics Platform{% endblock title %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+        color: white;
+        padding: 80px 0;
+        margin-bottom: 3rem;
+    }
+    .feature-card {
+        border: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+        height: 100%;
+    }
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .badge-construction {
+        background: #fbbf24;
+        color: #1e3a8a;
+        font-weight: 600;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 50px;
+    }
+    .feature-icon {
+        font-size: 2.5rem;
+        color: #1e3a8a;
+    }
+    .benefit-icon {
+        font-size: 2rem;
+        color: #1e3a8a;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="jumbotron text-center">
-    <h1 class="display-4">Welcome to Truck App!</h1>
-    <p class="lead">UNDER CONSTRUCTION</p>
-    <hr class="my-4">contact: info@aliyu.com.ng for more information.</p>
+<div class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3">TruckApp</h1>
+        <p class="lead mb-4">Move Anything, Anywhere, Anytime</p>
+        <span class="badge badge-construction"><i class="bi bi-cone-striped"></i> UNDER CONSTRUCTION <i class="bi bi-cone-striped"></i></span>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h2 class="mb-4">Your Trusted Logistics Partner Across Nigeria</h2>
+            <p class="lead text-muted">
+                TruckApp connects customers who need to move goods with reliable, verified drivers across Nigeria. 
+                From Lagos to Abuja, Port Harcourt to Kano, we handle everything—products, equipment, livestock, 
+                and more. Whether you're moving goods across town or shipping to another state, we make logistics 
+                simple, fast, and affordable.
+            </p>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <h3 class="text-center mb-4">For Customers</h3>
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-truck-front feature-icon mb-3"></i>
+                            <h5 class="card-title">Book Instantly</h5>
+                            <p class="card-text text-muted">Need to move goods anywhere in Nigeria? Book a verified driver in minutes. From small vans to large trucks, we handle general cargo, equipment, and even livestock.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-geo-alt feature-icon mb-3"></i>
+                            <h5 class="card-title">Track Live</h5>
+                            <p class="card-text text-muted">Stay informed every step of the way. Track your shipment in real-time from pickup to delivery, anywhere across Nigeria.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-credit-card feature-icon mb-3"></i>
+                            <h5 class="card-title">Transparent Pricing</h5>
+                            <p class="card-text text-muted">Fair rates based on distance, weight, and vehicle type. No hidden charges. Save money with competitive pricing across all Nigerian routes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-center mb-4 mt-5">For Drivers</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-cash-stack feature-icon mb-3"></i>
+                            <h5 class="card-title">Earn More</h5>
+                            <p class="card-text text-muted">Access delivery jobs across Nigeria. Work your own hours, maximize your truck's capacity, and earn competitive rates on every trip—whether local or interstate.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-shield-check feature-icon mb-3"></i>
+                            <h5 class="card-title">Build Your Reputation</h5>
+                            <p class="card-text text-muted">Complete our simple verification process and start building trust. Get rated by customers and gain access to more premium jobs.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-bell feature-icon mb-3"></i>
+                            <h5 class="card-title">Stay Connected</h5>
+                            <p class="card-text text-muted">Receive instant notifications for jobs in your area or along your regular routes. Accept, track, and complete deliveries with ease.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-primary">
+                <div class="card-body p-4 text-center">
+                    <h4 class="card-title mb-3">Why Choose TruckApp?</h4>
+                    <div class="row mt-4">
+                        <div class="col-md-3">
+                            <i class="bi bi-patch-check benefit-icon"></i>
+                            <p class="mb-0 fw-bold mt-2">Verified Drivers</p>
+                            <small class="text-muted">All drivers are background-checked</small>
+                        </div>
+                        <div class="col-md-3">
+                            <i class="bi bi-shield-lock benefit-icon"></i>
+                            <p class="mb-0 fw-bold mt-2">Secure Payments</p>
+                            <small class="text-muted">Safe online transactions</small>
+                        </div>
+                        <div class="col-md-3">
+                            <i class="bi bi-lightning-charge benefit-icon"></i>
+                            <p class="mb-0 fw-bold mt-2">Fast & Reliable</p>
+                            <small class="text-muted">Quick bookings, on-time delivery</small>
+                        </div>
+                        <div class="col-md-3">
+                            <i class="bi bi-headset benefit-icon"></i>
+                            <p class="mb-0 fw-bold mt-2">24/7 Support</p>
+                            <small class="text-muted">We're here when you need us</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 bg-light">
+                <div class="card-body p-5">
+                    <h3 class="text-center mb-4">What We Move</h3>
+                    <div class="row g-4 text-center">
+                        <div class="col-md-3">
+                            <i class="bi bi-box-seam" style="font-size: 2rem; color: #1e3a8a;"></i>
+                            <h6 class="mt-2">General Cargo</h6>
+                            <p class="small text-muted mb-0">Products, equipment, furniture</p>
+                        </div>
+                        <div class="col-md-3">
+                            <i class="bi bi-building" style="font-size: 2rem; color: #1e3a8a;"></i>
+                            <h6 class="mt-2">Construction Materials</h6>
+                            <p class="small text-muted mb-0">Cement, blocks, steel, timber</p>
+                        </div>
+                        <div class="col-md-3">
+                            <i class="bi bi-basket" style="font-size: 2rem; color: #1e3a8a;"></i>
+                            <h6 class="mt-2">Agricultural Produce</h6>
+                            <p class="small text-muted mb-0">Grains, fruits, vegetables</p>
+                        </div>
+                        <div class="col-md-3">
+                            <i class="bi bi-flower1" style="font-size: 2rem; color: #1e3a8a;"></i>
+                            <h6 class="mt-2">Livestock</h6>
+                            <p class="small text-muted mb-0">Cattle, goats, poultry, and more</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="alert alert-info border-0">
+                <h5 class="alert-heading">Coming Soon!</h5>
+                <p class="mb-0">We're putting the finishing touches on the platform. Sign up to be notified when we launch and get exclusive early access.</p>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}
