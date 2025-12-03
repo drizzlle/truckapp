@@ -26,12 +26,12 @@ load_dotenv(BASE_DIR / '.env')
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-production')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = ['*.vercel.app','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['https://truckapp-nine.vercel.app','localhost','127.0.0.1']
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = os.environ.get(
